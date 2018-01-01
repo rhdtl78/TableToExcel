@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>test</title>
+</head>
+
+<body>
+  <div id="btns">
+    <button type="button" name="button" id='btnExport'>Export</button>
+    <button type="button" name="button" id="MAKE_TABLE">Make Table</button>
+  </div>
+  <textarea id="TABLE_DATA" rows='10' cols='100'></textarea>
+  <div class="test">
+
+  </div>
+  <table width="100%" border="0" cellspacing="1" cellpadding="0" style="background-color: #5384AF" id="divData">
+
+  </table>
+
+
+  <script src="jquery-3.2.1.js"></script>
+  <script src="jquery.techbytarun.excelexportjs.js"></script>
+  <script>
+    $(function() {
+      $('#MAKE_TABLE').on('click',function() {
+        $('#divData>*').remove();
+        var tbody = $('<tbody/>');
+        var datastr = $('#TABLE_DATA').val();
+        var substr = datastr.split(/[\t\n\r]/gi);
+        console.log(substr);
+        var formedData = [];
+        var i = 0, ii = 0;
+        var length = substr.length;
+        while (i < length) {
+          var start = (i + length) % length;
+          formedData[ii++] = substr.slice(start, start + 9);
+          i += 9;
+        }
+        var loopCnt = 0, colCnt = 0;
+        formedData.forEach(function (dataRow) {
+          var tr = $('<tr/>',{
+            'height':"18",
+            'bgcolor':"#EFF7FD",
+            'align':"center",
+            'style':"color:black;"
+          });
+          console.log(dataRow);
+          colCnt = 0;
+          dataRow.forEach(function (data) {
+            var td = $('<td/>');
+            if(dataRow.length == 1){
+              td.attr('colspan', '8');
+            }
+            td.text(data);
+            tr.append(td);
+            colCnt++;
+            if(colCnt == dataRow.length){
+              tbody.append(tr);
+              console.log(tr.html());
+              loopCnt++;
+              if(loopCnt == formedData.length){
+                console.log(tbody);
+                $('#divData').append(tbody);
+              }
+            }
+          });
+        });
+      });
+
+
+      $('#btnExport').click(function() {
+        var uri = $('#divData').excelexportjs({
+          containerid: 'divData',
+          datatype: 'table',
+          returnUri: true
+        });
+        $('a').remove();
+        var btn = $('<a/>');
+        btn.attr('download', '이수과목성적조회').attr('href', uri).attr('target', '_black').text('download');
+        $('#btns').append(btn);
+      });
+    })
+  </script>
+</body>
+
+</html>
