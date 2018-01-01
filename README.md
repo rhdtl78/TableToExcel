@@ -9,3 +9,12 @@ This has dependencies on the following things.
 - ExcelExportJs
 
 ExcelExportJs's Link: [ExcelExportJs](https://github.com/tarunbatta/ExcelExportJs.git)
+
+
+## To Do
+- colspan
+- rowspan
+- User Custom FileName
+
+There is no colspan or rowspan function.
+This needs them.
